@@ -1,0 +1,21 @@
+services:
+  srv-samba:
+    build: .
+    image: sae-samba
+    container_name: srv-ubuntu
+    hostname: srv-samba
+    privileged: true
+    tty: true
+    stdin_open: true
+    networks:
+      sae_network:
+        ipv4_address: 172.20.0.10
+
+networks:
+  sae_network:
+    name: sae_bridge
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
+          gateway: 172.20.0.1
