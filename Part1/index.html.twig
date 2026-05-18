@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Art mathématique{% endblock %}
+
+{% block body %}
+<style>
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+</style>
+
+<div class="example-wrapper">
+    <main id="#fig1">
+        <a class="navbar-brand" href="#fig1">Figure 1</a>
+        <h1>Paramètres :</h1>
+        <!-- C'est grâce à l'attribut name que l'on peut récupérer la valeur associée dans symfony -->
+        <form method="post" action="/calculer">
+            <div>
+                <label for="Dimension" class="form-label">Dimension</label>
+                    <input type="range" class="form-range" min="0" max="6" step="1" id="dimension" name="dimension">
+            </div>
+            <div>
+                <button type="submit" class="btn btn-primary" name="calculer" value="1">Calculer</button>
+                <button type="submit" class="btn btn-danger" name="imprimer" value="1">Imprimer</button>
+            </div>
+        </form>
+
+        <h1> Résultat : </h1>
+        <img src="{{fichier}}" width="100%">
+    </main>
+    <main id="#fig2">
+        <a class="navbar-brand" href="#fig2">Figure 2</a>
+        <h1>Paramètres :</h1>
+        <form method="post" action="/fig-deux">
+            <div>
+                <label for="Hasard" class="form-label">Hasard</label>
+                    <input type="range" class="form-range" min="0" max="1" step="0.1" id="hasard" name="hasard">
+                <label for="hasardangle" class="form-label">Hasard angle</label>
+                    <input type="range" class="form-range" min="0" max="1" step="0.1" id="hasardangle" name="hasardangle">
+                <label for="nbcolonnes" class="form-label">Nb Colonnes</label>
+                    <input type="range" class="form-range" min="1" max="10" step="1" id="nbcolonnes" name="nbcolonnes">
+                <label for="nblignes" class="form-label">Nb  Lignes</label>
+                    <input type="range" class="form-range" min="1" max="10" step="1" id="nblignes" name="nblignes">
+            </div>
+            <div>
+                <button type="submit" class="btn btn-primary" name="calculer" value="1">Calculer</button>
+                <button type="submit" class="btn btn-danger" name="imprimer" value="1">Imprimer</button>
+            </div>
+        </form>
+        <h1> Résultat : </h1>
+        <img src="{{fichier}}" width="100%">
+    </main>
+</div>
+{% endblock %}

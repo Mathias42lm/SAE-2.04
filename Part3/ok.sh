@@ -1,43 +1,38 @@
-docker exec -it srv-ubuntu bash
+#!/bin/bash
+set -e
 
-rm -f /etc/samba/smb.conf
-rm -rf /var/lib/samba/private/*
-rm -rf /var/lib/samba/sysvol/*
+SAMBA_DB="/var/lib/samba/private/sam.ldb"
 
-samba-tool domain provision \
-  --server-role=dc \
-  --use-rfc2307 \
-  --dns-backend=SAMBA_INTERNAL \
-  --realm=SAE.LOCAL \
-  --domain=SAE \
-  --adminpass="TonPassFort123!"
+if [ ! -f "$SAMBA_DB" ]; then
+    echo "[*] Aucun domaine détecté. Lancement de la séquence de provisionnement..."
 
-samba-tool group add cmoi
+    # Sécurité : on active nullglob pour éviter que *.sh ne devienne une string littérale si vide
+    shopt -s nullglob
+    scripts=(/cmd/*.sh)
+    
+    # Check critique : si le tableau est vide, on coupe tout
+    if [ ${#scripts[@]} -eq 0 ]; then
+        echo "[!] ERREUR CRITIQUE : Aucun script d'initialisation trouvé dans /cmd/ !"
+        echo "[!] Vérifie ton Dockerfile et ton arborescence locale."
+        exit 1
+    fi
 
-samba-tool user create moi "Root4242" --given-name=Moi --surname=SAE --mail-address=moi@domain.org --login-shell=/bin/bash --password=Root4242
+    for script in "${scripts[@]}"; do
+        if [ -x "$script" ]; then
+            echo "=================================================="
+            echo "[->] Exécution de $script"
+            echo "=================================================="
+            "$script"
+        else
+            echo "[!] ERREUR : Le script $script n'est pas exécutable."
+            exit 1
+        fi
+    done
 
-samba-tool group addmembers cmoi moi
+    echo "[+] Séquence de provisionnement terminée avec succès."
+else
+    echo "[*] Base SAM détectée. Le domaine SAE.LOCAL est déjà opérationnel."
+fi
 
-samba-tool user enable moi
-
-mkdir -p /partage/amoi
-
-sed -i 's/passwd:.*compat.*/& winbind/' /etc/nsswitch.conf
-sed -i 's/group:.*compat.*/& winbind/' /etc/nsswitch.conf
-
-# 3. Vérifier que Linux voit bien le groupe AD (la commande doit retourner cmoi)
-getent group cmoi
-
-# 4. Appliquer les droits (la commande ne renverra plus d'erreur)
-chown -R root:moi /partage/amoi
-chmod -R 770 /partage/amoi
-
-cat << EOF >> /etc/samba/smb.conf
-
-[amoi]
-    path = /partage/amoi
-    valid users = @cmoi
-    write list = @cmoi
-EOF
-
-samba
+echo "[*] Démarrage du démon Samba Active Directory..."
+exec samba -F -i
