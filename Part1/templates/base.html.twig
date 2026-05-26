@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %}Art Mathématique{% endblock %}</title>
+        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
+  
+        {% block stylesheets %}
+            {###########################################}
+            {# Utilise le style sketchy de bootswatch  #}
+            {###########################################}
+            <link href="https://bootswatch.com/5/sketchy/bootstrap.min.css" rel="stylesheet">
+        {% endblock %}
+
+        {% block javascripts %}
+        {% endblock %}
+    </head>
+    <body>
+        <nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="/">Portfolio</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarColor01">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                    <a class="nav-link" href="/figun">Figure 1</a>
+                    </li>
+                    <li class="nav-item">
+                    <a class="nav-link" href="/figdeux">Figure 2</a>
+                    </li>
+                    <li class="nav-item">
+                    <a class="nav-link" href="#">Figure 3</a>
+                    </li>
+                </ul>
+                </div>
+            </div>
+        </nav>
+        <div class="container">{% block body %}{% endblock %}</div>
+            {% block javascript %}
+                <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+            {% endblock %}
+    </body>
+</html>

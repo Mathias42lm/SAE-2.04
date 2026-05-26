@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Sélection de la Figure{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0 text-center">Sélection de la Figure</h4>
+                </div>
+                <div class="card-body">
+                    <div class="d-grid gap-3">
+                        <a href="{{ path('app_fig_un') }}" class="btn btn-outline-info btn-lg">Afficher la Figure 1</a>
+                        <a href="{{ path('app_fig_2') }}" class="btn btn-outline-info btn-lg">Afficher la Figure 2</a>
+                        <!-- Commenté car la route n'existe pas encore dans le controller -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

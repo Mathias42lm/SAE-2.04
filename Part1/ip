@@ -1,0 +1,2 @@
+nom	prenom	esx	reseau	        ip	        masque	        dns	        passerelle	domaine	        clone
+MELLIER	Mathias	ESX6	RT_VLAN704	192.168.108.43	255.255.248.0	10.250.250.12	192.168.104.1	ujmse.local 	192.168.108.143

@@ -1,0 +1,4 @@
+AuthType Basic
+AuthName "Authentifiez vous"
+AuthUserFile "/var/www/html/amath/public/.htpasswd"
+require valid-user
