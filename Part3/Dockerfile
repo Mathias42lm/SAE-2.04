@@ -2,8 +2,11 @@ FROM ubuntu:latest
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-# Installation des paquets et nettoyage du cache
+# Installation des paquets (ajout de samba-ad-dc)
 RUN apt update && apt install -y \
+    python3-pip \
+    python3-fastapi \
+    python3-uvicorn \
     samba \
     smbclient \
     cifs-utils \
@@ -14,10 +17,14 @@ RUN apt update && apt install -y \
     iproute2 \
     winbind \
     libnss-winbind \
+    samba-ad-provision \
+    samba-dsdb-modules \
+    samba-vfs-modules \
+    samba-ad-dc \
     && rm -rf /var/lib/apt/lists/*
 
 # Copie de l'orchestrateur ET du dossier des sous-scripts
-COPY ./ok.sh /ok.sh
+COPY ./linux/l-start.sh /ok.sh
 COPY ./cmd /cmd
 
 # Application des droits d'exécution en une seule couche

@@ -1,0 +1,1 @@
+A regarder : rajouter soit un script soit une page pour faire en sorte de modifier et voir les partages encour + rajouter ou supr des personnes 

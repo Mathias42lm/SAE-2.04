@@ -4,7 +4,7 @@ import sys
 
 # Configuration du canevas (Ratio vertical proche de l'original)
 WIDTH, HEIGHT = 600, 800
-FPS = 30
+FPS = 60
 
 # Palette de couleurs (Inspirée du papier vieilli et de l'encre d'époque)
 BG_COLOR = (242, 238, 227)       # Fond crème/beige
@@ -12,7 +12,7 @@ LINE_COLOR = (185, 65, 55)       # Rouge brique / Sienne
 
 # Paramètres de l'algorithme génératif
 MIN_WIDTH = 6
-MIN_HEIGHT = 12
+MIN_HEIGHT = 15
 MAX_DEPTH = 9
 
 def generate_art(x, y, w, h, depth, lines):

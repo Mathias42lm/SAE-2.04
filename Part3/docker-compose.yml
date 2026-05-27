@@ -8,10 +8,10 @@ services:
     tty: true
     stdin_open: true
     ports:
-      - "137:137/udp"
-      - "138:138/udp"
-      - "139:139"
-      - "445:445"
+      - "8137:137/udp"
+      - "8138:138/udp"
+      - "8139:139"
+      - "8445:445"
     networks:
       sae_network:
         ipv4_address: 172.20.0.10

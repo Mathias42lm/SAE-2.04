@@ -13,19 +13,19 @@ cat << 'EOF' >> /etc/samba/smb.conf
 
 [amoi]
     path = /partage/amoi
-    read only = no
+    read only = yes
     valid users = @cmoi
     write list = @cmoi
 
 [atoi]
     path = /partage/atoi
-    read only = no
+    read only = yes
     valid users = @cmoi, @ctoi
     write list = @ctoi
 
 [anous]
     path = /partage/anous
-    read only = no
+    read only = yes
     valid users = @cmoi, @ctoi, @cnous
     write list = @cnous
 
@@ -37,13 +37,13 @@ cat << 'EOF' >> /etc/samba/smb.conf
 
 [amoi-atoi]
     path = /partage/amoi-atoi
-    read only = no
+    read only = yes
     valid users = @cmoi, @ctoi
     write list = @cmoi
 
 [amoi-anous]
     path = /partage/amoi-anous
-    read only = no
+    read only = yes
     valid users = @cmoi, @cnous
     write list = @cmoi
 EOF

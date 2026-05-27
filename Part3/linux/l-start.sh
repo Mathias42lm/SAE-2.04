@@ -33,6 +33,7 @@ if [ ! -f "$SAMBA_DB" ]; then
 else
     echo "[*] Base SAM détectée. Le domaine SAE.LOCAL est déjà opérationnel."
 fi
+# ... (le reste du script au-dessus reste identique)
 
 echo "[*] Démarrage du démon Samba Active Directory..."
-exec samba -F -i
+exec /usr/sbin/samba -F -i
