@@ -25,8 +25,15 @@ function Show-Menu {
     Write-Host "5. Créer un groupe de sécurité"
     Write-Host "6. Supprimer un groupe"
     Write-Host "7. Gérer les membres d'un groupe (Ajout/Retrait)"
-    Write-Host "---"
-    Write-Host "8. Quitter"
+    Write-Host "--- Partages ---" -ForegroundColor Yellow
+    Write-Host "8. Voir les partages Samba" 
+    Write-Host "9. Ajouter un partage Samba" 
+    Write-Host "10. Supprimer un partage Samba" 
+    Write-Host "11. Modifier les permissions d'un partage" 
+    Write-Host "--- TESTS ---" -ForegroundColor Yellow
+    Write-Host "12. Tester la connexion d'un utilisateur"
+    Write-Host "---------" -ForegroundColor Yellow
+    Write-Host "13. Quitter"
     Write-Host "========================================" -ForegroundColor Cyan
 }
 
@@ -173,12 +180,79 @@ function Manage-GroupMembers {
     Pause
 }
 
+# ---------------------------------------------------------
+# MODULE PARTAGES
+# ---------------------------------------------------------
+
+function Add-SambaShare {
+    Write-Host "`n[*] CRÉATION D'UN PARTAGE SAMBA" -ForegroundColor Yellow
+    $shareName = Read-Host "Nom du partage (ex: Data)"
+    $sharePath = Read-Host "Chemin absolu dans le conteneur (ex: /srv/samba/data)"
+    
+    if ([string]::IsNullOrWhiteSpace($shareName) -or [string]::IsNullOrWhiteSpace($sharePath)) { return }
+
+    Write-Host "[*] Exécution dans le conteneur..." -ForegroundColor Cyan
+    docker exec -i $ContainerName bash /cmd/manage_shares.sh add $shareName $sharePath
+    Pause
+}
+
+function Remove-SambaShare {
+    Write-Host "`n[*] SUPPRESSION D'UN PARTAGE SAMBA" -ForegroundColor Yellow
+    $shareName = Read-Host "Nom du partage à supprimer"
+    
+    if ([string]::IsNullOrWhiteSpace($shareName)) { return }
+
+    if ($shareName -match "^(sysvol|netlogon)$") {
+        Write-Host "[!] Verrou de sécurité : Impossible de supprimer les partages vitaux de l'AD." -ForegroundColor Red
+        Pause ; return
+    }
+
+    $confirm = Read-Host "Confirmer la suppression du partage '$shareName' ? (O/N)"
+    if ($confirm -eq 'O' -or $confirm -eq 'o') {
+        docker exec -i $ContainerName bash /cmd/manage_shares.sh remove $shareName
+    }
+    Pause
+}
+
+function Modify-SharePermissions {
+    Write-Host "`n[*] MODIFICATION DES PERMISSIONS D'UN PARTAGE" -ForegroundColor Yellow
+    $shareName = Read-Host "Nom du partage cible"
+    $targetName = Read-Host "Nom de l'utilisateur ou du groupe (AD)"
+    
+    Write-Host "1. Lecture seule (rx)"
+    Write-Host "2. Lecture / Écriture (rwx)"
+    $permChoice = Read-Host "Choix de la permission (1 ou 2)"
+    
+    if ([string]::IsNullOrWhiteSpace($shareName) -or [string]::IsNullOrWhiteSpace($targetName)) { return }
+
+    $permArg = if ($permChoice -eq '1') { "read" } elseif ($permChoice -eq '2') { "write" } else { $null }
+    
+    if ($null -eq $permArg) { 
+        Write-Host "[-] Choix invalide." -ForegroundColor Red 
+        Pause ; return 
+    }
+
+    docker exec -i $ContainerName bash /cmd/manage_shares.sh perms $shareName $targetName $permArg
+    Pause
+}
+
+function Get-SambaShareList {
+    Write-Host "`n[*] LISTE DES PARTAGES SAMBA" -ForegroundColor Yellow
+    docker exec -i $ContainerName bash /cmd/manage_shares.sh list
+    Pause
+}
+
+function Test-UserConnection {
+    &./test.ps1
+    Pause
+}
+
 # -----------------
 # BOUCLE PRINCIPALE
 # -----------------
 do {
     Show-Menu
-    $choice = Read-Host "-> Sélectionne une action (1-8)"
+    $choice = Read-Host "-> Sélectionne une action (1-13)"
 
     switch ($choice) {
         '1' { Get-UserList }
@@ -188,7 +262,12 @@ do {
         '5' { Add-SambaGroup }
         '6' { Remove-SambaGroup }
         '7' { Manage-GroupMembers }
-        '8' { Write-Host "Fermeture de l'outil d'administration." -ForegroundColor Magenta ; break }
+        '8' { Get-SambaShareList }
+        '9' { Add-SambaShare }
+        '10' { Remove-SambaShare }
+        '11' { Modify-SharePermissions }
+        '12' { Test-UserConnection }
+        '13' { Write-Host "Fermeture de l'outil d'administration." -ForegroundColor Magenta ; break }
         default { Write-Host "Option invalide." -ForegroundColor Red ; Start-Sleep -Seconds 1 }
     }
-} while ($choice -ne '8')
+} while ($choice -ne '13')

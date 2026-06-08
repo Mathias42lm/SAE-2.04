@@ -8,6 +8,7 @@ RUN apt update && apt install -y \
     python3-fastapi \
     python3-uvicorn \
     samba \
+    acl \
     smbclient \
     cifs-utils \
     nano \

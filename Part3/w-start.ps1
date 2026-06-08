@@ -24,18 +24,4 @@ if (-not $isRunning) {
     exit 1
 }
 
-Write-Host "`n[*] 3. Exécution des scripts de configuration internes..." -ForegroundColor Cyan
-
-Write-Host "  -> Phase 1 : Provisionnement (1un.ps1)" -ForegroundColor Yellow
-docker exec -it $ContainerName pwsh -File /cmd/1un.ps1
-
-Write-Host "  -> Phase 2 : Utilisateurs et Groupes (2deux.ps1)" -ForegroundColor Yellow
-docker exec -it $ContainerName pwsh -File /cmd/2deux.ps1
-
-Write-Host "  -> Phase 3 : Partages et Droits (3trois.ps1)" -ForegroundColor Yellow
-docker exec -it $ContainerName pwsh -File /cmd/3trois.ps1
-
-Write-Host "`n[*] 4. Application à chaud de la configuration..." -ForegroundColor Cyan
-docker exec -it $ContainerName smbcontrol all reload-config
-
 Write-Host "`n[+] DÉPLOIEMENT TERMINÉ AVEC SUCCÈS !" -ForegroundColor Green

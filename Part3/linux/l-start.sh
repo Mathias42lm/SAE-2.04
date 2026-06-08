@@ -18,6 +18,12 @@ if [ ! -f "$SAMBA_DB" ]; then
     fi
 
     for script in "${scripts[@]}"; do
+        # Exclusion du script de gestion des partages (qui est un outil, pas un script d'init)
+        if [ "$(basename "$script")" = "manage_shares.sh" ]; then
+            echo "[*] Ignoré : $script (Script utilitaire)"
+            continue
+        fi
+
         if [ -x "$script" ]; then
             echo "=================================================="
             echo "[->] Exécution de $script"
@@ -33,7 +39,6 @@ if [ ! -f "$SAMBA_DB" ]; then
 else
     echo "[*] Base SAM détectée. Le domaine SAE.LOCAL est déjà opérationnel."
 fi
-# ... (le reste du script au-dessus reste identique)
 
 echo "[*] Démarrage du démon Samba Active Directory..."
 exec /usr/sbin/samba -F -i
