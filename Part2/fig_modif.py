@@ -1,10 +1,11 @@
+import sys
 import pygame
 import random
 
 # --- CONFIGURATION PERSONNELLE ---
 COULEUR_BASE = (185, 65, 55)
 TAILLE = 4000
-MAX_DEPTH = random.randint(7, 100)  # Profondeur maximale aléatoire pour plus de variété 
+MAX_DEPTH = int(sys.argv[1]) # Profondeur maximale aléatoire pour plus de variété 
 
 pygame.init()
 screen = pygame.Surface((TAILLE, TAILLE))

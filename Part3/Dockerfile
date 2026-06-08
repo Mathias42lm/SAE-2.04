@@ -4,9 +4,6 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 # Installation des paquets (ajout de samba-ad-dc)
 RUN apt update && apt install -y \
-    python3-pip \
-    python3-fastapi \
-    python3-uvicorn \
     samba \
     acl \
     smbclient \

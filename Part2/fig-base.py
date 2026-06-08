@@ -5,6 +5,7 @@ import random
 COULEUR_LIGNE = (185, 65, 55)
 COULEUR_FOND = (242, 238, 227)
 TAILLE = 4000
+
 MIN_W = 140
 MIN_H = 72
 MAX_DEPTH = 90
@@ -14,7 +15,7 @@ pygame.init()
 screen = pygame.Surface((TAILLE, TAILLE))
 screen.fill(COULEUR_FOND)
 
-def generate_art(x, y, w, h, depth):
+def generate_art(x: int, y: int, w: int, h: int, depth: int):
     """
     Subdivision récursive dessinant directement sur la surface.
     """
@@ -29,8 +30,8 @@ def generate_art(x, y, w, h, depth):
         return
 
     # Probabilités basées sur le gradient X
-    p_horizontal = 0.45 * (1.0 - (x_ratio ** 0.7))
-    p_vertical = 0.55
+    p_horizontal = 0.45 * (1.0 - (x_ratio ** 0.9))
+    p_vertical = 2
 
     # Choix de la coupe
     if can_split_v and (not can_split_h or random.random() < p_vertical / (p_vertical + p_horizontal)):
